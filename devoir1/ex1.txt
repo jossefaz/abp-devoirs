@@ -1,0 +1,38 @@
+PROGRAMME Exercice1;
+VARIABLE 
+    A : ENTIER;
+    B : ENTIER;
+    C : ENTIER;
+
+ECRIRE ('Entrez la valeur de A : ');
+LIRE(A);
+ECRIRE ('Entrez la valeur de B : ');
+LIRE(B);
+ECRIRE ('Entrez la valeur de C : ');
+LIRE(C);
+
+
+TANT QUE( (A == B) ET (B == C) ) FAIRE
+    ECRIRE ('Erreur de saisie : les nombres en entrée doivent être differents !')
+    ECRIRE ('Entrez la valeur de A : ');
+    LIRE(A);
+    ECRIRE ('Entrez la valeur de B : ');
+    LIRE(B);
+    ECRIRE ('Entrez la valeur de C : ');
+    LIRE(C);
+FAIT;
+
+
+SI ((A < B) ET (A < C)) 
+ALORS
+    ECRIRE ('La plus petite valeur est A');
+SINON
+    SI ((B < A) ET (B < C))
+    ALORS
+        ECRIRE ('La plus petite valeur est B');
+    SINON
+        ECRIRE ('La plus petite valeur est A');
+    FIN SI;
+FIN SI;
+
+
