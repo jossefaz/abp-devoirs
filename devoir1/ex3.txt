@@ -1,0 +1,40 @@
+PROGRAMME Exercice3;
+VARIABLE 
+    A : ENTIER;
+    B : ENTIER;
+    OPERATION : CHAINE DE CARACTERE;
+
+ECRIRE ('Entrez la valeur de A : ');
+LIRE(A);
+
+TANT QUE (NON ENTIER(A) OU A < 0) FAIRE 
+    ECRIRE ('Erreur de saisie : "A" DOIT etre un entier positif, veuillez ressaisir');
+    LIRE(A);
+
+
+ECRIRE ('Entrez la valeur de B : ');
+LIRE(B);
+
+TANT QUE (NON ENTIER(B) OU B < 0) FAIRE 
+    ECRIRE ('Erreur de saisie : "B" DOIT etre un entier positif, veuillez ressaisir');
+    LIRE(B);
+
+ECRIRE ('Entrez l'operation souhaitee Addition/Soustraction/Multiplication' :');
+LIRE(OPERATION);
+
+TANT QUE (OPERATION NON "Addition" OU OPERATION NON "Soustraction" OU OPERATION NON "Multiplication") FAIRE 
+    ECRIRE ('Erreur de saisie ne rentrer que l'un des choix suivants : Addition/Soustraction/Multiplication :');
+    LIRE(OPERATION);
+
+SELON QUE OPERATION VAUT
+    "Addition" : 
+        ECRIRE('A + B = ' & CHAINE DE CARACTERE(A + B));
+    "Soustraction":
+        ECRIRE('A - B = ' & CHAINE DE CARACTERE(A - B));
+    "Multiplication" :
+        ECRIRE('A x B = ' & CHAINE DE CARACTERE(A * B));
+
+FIN PROGRAMME;
+
+
+
