@@ -1,8 +1,9 @@
-PROGRAMME Exercice1;
+PROGRAMME Exercice2;
 VARIABLE 
     A : ENTIER;
     B : ENTIER;
     C : ENTIER;
+    MAX : ENTIER;
 
 ECRIRE ('Entrez la valeur de A : ');
 LIRE(A);
@@ -10,7 +11,6 @@ ECRIRE ('Entrez la valeur de B : ');
 LIRE(B);
 ECRIRE ('Entrez la valeur de C : ');
 LIRE(C);
-
 
 TANT QUE( (A == B) ET (B == C) ) FAIRE
     ECRIRE ('Erreur de saisie : les nombres en entrée doivent être differents !')
@@ -22,18 +22,15 @@ TANT QUE( (A == B) ET (B == C) ) FAIRE
     LIRE(C);
 FAIT;
 
-
-SI ((A < B) ET (A < C)) 
+MAX <- A;
+SI B > MAX
 ALORS
-    ECRIRE ('La plus petite valeur est A');
-SINON
-    SI ((B < A) ET (B < C))
-    ALORS
-        ECRIRE ('La plus petite valeur est B');
-    SINON
-        ECRIRE ('La plus petite valeur est C');
-    FIN SI;
+    MAX <- B;
 FIN SI;
+SI C > MAX
+ALORS
+    MAX <- C;
+FIN SI;
+ECRIRE ('La plus grande valeur est : ' & CHAINE_DE_CARACTERE(MAX));
 FIN PROGRAMME;
-
 
