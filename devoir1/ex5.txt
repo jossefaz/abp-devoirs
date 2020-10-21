@@ -1,10 +1,10 @@
 ###### PROGRAMME 1 : INSTRUCTION POUR ######
 
-PROGRAMME Exercice4_POUR;
+PROGRAMME Exercice5_POUR;
 
 VARIABLE
     N : ENTIER;
-    SOMME : ENTIER;
+    FACT : ENTIER;
 DEBUT
     ECRIRE ('Entrez la valeur de N : ');
     LIRE(N);
@@ -13,21 +13,22 @@ DEBUT
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
 
-    SOMME <- 0;
-    POUR I VARIANT DE 1 A N FAIRE
-        SOMME <- SOMME + I;
-    FAIT;
-
-    ECRIRE('La somme de tous les entiers de 0 a : ' & CHAINE DE CARACTERE(N) & 'est de : ' & CHAINE DE CARACTERE(SOMME) );
+    FACT <-1
+    SI (NON N==1)
+    ALORS 
+        POUR I VARIANT DE 1 A N FAIRE
+            FACT <- FACT * I;
+        FAIT;
+    ECRIRE('La factorielle de ' & CHAINE DE CARACTER(N) & ' est de : ' & CHAINE DE CARACTER(FACT));
 FIN;
 
 ###### PROGRAMME 2 : INSTRUCTION TANT QUE ######
 
-PROGRAMME Exercice4_TANT QUE;
+PROGRAMME Exercice5_TANT_QUE;
 
 VARIABLE
     N : ENTIER;
-    SOMME : ENTIER;
+    FACT : ENTIER;
     I : ENTIER;
 DEBUT
     ECRIRE ('Entrez la valeur de N : ');
@@ -37,23 +38,24 @@ DEBUT
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
 
-    SOMME <- 0;
-    I <- 1;
-    TANT QUE (I <= N) FAIRE 
-        SOMME <- SOMME + I;
-        I <- I +1;
-    FAIT;
-
-    ECRIRE('La somme de tous les entiers de 0 a : ' & CHAINE DE CARACTERE(N) & 'est de : ' & CHAINE DE CARACTERE(SOMME) );
+    FACT <-1
+    SI (NON N==1)
+    ALORS 
+        I <- 1;
+        TANT QUE (I <= N) FAIRE
+            FACT <- FACT * I;
+            I <- I + 1
+        FAIT;
+    ECRIRE('La factorielle de ' & CHAINE DE CARACTER(N) & ' est de : ' & CHAINE DE CARACTER(FACT));
 FIN;
 
 ###### PROGRAMME 3 : INSTRUCTION REPETER ######
 
-PROGRAMME Exercice4_REPETER;
+PROGRAMME Exercice5_TANT_QUE;
 
 VARIABLE
     N : ENTIER;
-    SOMME : ENTIER;
+    FACT : ENTIER;
     I : ENTIER;
 DEBUT
     ECRIRE ('Entrez la valeur de N : ');
@@ -63,22 +65,15 @@ DEBUT
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
 
-    SOMME <- 0;
-    I <- 1;
-    REPETER 
-        SOMME <- SOMME + I;
-        I <- I +1;
-    JUSQU'A (I <= N);
+    FACT <-1
+    SI (NON N==1)
+    ALORS 
+        I <- 1;
+        REPETER
+            FACT <- FACT * I;
+            I <- I + 1
+        TANT QUE (I <= N);
+    ECRIRE('La factorielle de ' & CHAINE DE CARACTER(N) & ' est de : ' & CHAINE DE CARACTER(FACT));
 FIN;
-
-
-
-   
-
-
-
-
-
-
-
+    
 
