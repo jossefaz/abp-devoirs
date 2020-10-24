@@ -9,9 +9,10 @@ DEBUT
     ECRIRE ('Entrez la valeur de N : ');
     LIRE(N);
 
-    TANT QUE (NON ENTIER(N) OU N <= 0) FAIRE 
+    TANT QUE (N <= 0) FAIRE 
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
+    FAIT;
 
     FACT <-1
     SI (NON N==1)
@@ -19,7 +20,8 @@ DEBUT
         POUR I VARIANT DE 1 A N FAIRE
             FACT <- FACT * I;
         FAIT;
-    ECRIRE('La factorielle de ' & CHAINE DE CARACTER(N) & ' est de : ' & CHAINE DE CARACTER(FACT));
+    FIN SI;
+    ECRIRE('La factorielle de ' & N & ' est de : ' & FACT);
 FIN;
 
 ###### PROGRAMME 2 : INSTRUCTION TANT QUE ######
@@ -34,9 +36,10 @@ DEBUT
     ECRIRE ('Entrez la valeur de N : ');
     LIRE(N);
 
-    TANT QUE (NON ENTIER(N) OU N <= 0) FAIRE 
+    TANT QUE (N <= 0) FAIRE 
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
+    FAIT;
 
     FACT <-1
     SI (NON N==1)
@@ -46,7 +49,8 @@ DEBUT
             FACT <- FACT * I;
             I <- I + 1
         FAIT;
-    ECRIRE('La factorielle de ' & CHAINE DE CARACTER(N) & ' est de : ' & CHAINE DE CARACTER(FACT));
+    FIN SI;
+    ECRIRE('La factorielle de ' & N & ' est de : ' & FACT);
 FIN;
 
 ###### PROGRAMME 3 : INSTRUCTION REPETER ######
@@ -61,10 +65,10 @@ DEBUT
     ECRIRE ('Entrez la valeur de N : ');
     LIRE(N);
 
-    TANT QUE (NON ENTIER(N) OU N <= 0) FAIRE 
+    TANT QUE (N <= 0) FAIRE 
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
-
+    FAIT;
     FACT <-1
     SI (NON N==1)
     ALORS 
@@ -73,7 +77,10 @@ DEBUT
             FACT <- FACT * I;
             I <- I + 1
         TANT QUE (I <= N);
-    ECRIRE('La factorielle de ' & CHAINE DE CARACTER(N) & ' est de : ' & CHAINE DE CARACTER(FACT));
+    FIN SI;
+    ECRIRE('La factorielle de ' & N & ' est de : ' & FACT);
 FIN;
-    
+
+
+
 

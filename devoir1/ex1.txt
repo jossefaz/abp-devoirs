@@ -21,13 +21,17 @@ DEBUT
         ECRIRE ('Entrez la valeur de C : ');
         LIRE(C);
     FAIT;
+    
 
-
-    SI ((A < B) ET (A < C)) 
-    ALORS
-        ECRIRE ('La plus petite valeur est A');
-    SINON
-        SI ((B < A) ET (B < C))
+    SI ((A < B)) 
+        SI (A<C)
+        ALORS
+            ECRIRE ('La plus petite valeur est A');
+        SINON
+            ECRIRE ('La plus petite valeur est C');
+        FIN SI;
+    SINON 
+        SI((B < C))
         ALORS
             ECRIRE ('La plus petite valeur est B');
         SINON

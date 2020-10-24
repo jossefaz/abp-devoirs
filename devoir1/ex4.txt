@@ -9,16 +9,17 @@ DEBUT
     ECRIRE ('Entrez la valeur de N : ');
     LIRE(N);
 
-    TANT QUE (NON ENTIER(N) OU N <= 0) FAIRE 
+    TANT QUE (N <= 0) FAIRE 
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
+    FAIT;
 
     SOMME <- 0;
     POUR I VARIANT DE 1 A N FAIRE
         SOMME <- SOMME + I;
     FAIT;
 
-    ECRIRE('La somme de tous les entiers de 0 a : ' & CHAINE DE CARACTERE(N) & 'est de : ' & CHAINE DE CARACTERE(SOMME) );
+    ECRIRE('La somme de tous les entiers de 0 a : ' & N & 'est de : ' & SOMME);
 FIN;
 
 ###### PROGRAMME 2 : INSTRUCTION TANT QUE ######
@@ -33,10 +34,10 @@ DEBUT
     ECRIRE ('Entrez la valeur de N : ');
     LIRE(N);
 
-    TANT QUE (NON ENTIER(N) OU N <= 0) FAIRE 
+    TANT QUE (N <= 0) FAIRE 
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
-
+    FAIT;
     SOMME <- 0;
     I <- 1;
     TANT QUE (I <= N) FAIRE 
@@ -44,7 +45,7 @@ DEBUT
         I <- I +1;
     FAIT;
 
-    ECRIRE('La somme de tous les entiers de 0 a : ' & CHAINE DE CARACTERE(N) & 'est de : ' & CHAINE DE CARACTERE(SOMME) );
+    ECRIRE('La somme de tous les entiers de 0 a : ' & N & 'est de : ' & SOMME );
 FIN;
 
 ###### PROGRAMME 3 : INSTRUCTION REPETER ######
@@ -59,9 +60,10 @@ DEBUT
     ECRIRE ('Entrez la valeur de N : ');
     LIRE(N);
 
-    TANT QUE (NON ENTIER(N) OU N <= 0) FAIRE 
+    TANT QUE (N <= 0) FAIRE 
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
+    FAIT;
 
     SOMME <- 0;
     I <- 1;

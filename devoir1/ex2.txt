@@ -21,6 +21,7 @@ DEBUT
         ECRIRE ('Entrez la valeur de C : ');
         LIRE(C);
     FAIT;
+    
 
     MAX <- A;
     SI B > MAX
@@ -31,6 +32,6 @@ DEBUT
     ALORS
         MAX <- C;
     FIN SI;
-    ECRIRE ('La plus grande valeur est : ' & CHAINE_DE_CARACTERE(MAX));
+    ECRIRE ('La plus grande valeur est : ' & MAX);
 FIN;
 

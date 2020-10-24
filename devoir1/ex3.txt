@@ -7,34 +7,37 @@ DEBUT
     ECRIRE ('Entrez la valeur de A : ');
     LIRE(A);
 
-    TANT QUE (NON ENTIER(A) OU A <= 0) FAIRE 
+    TANT QUE (A <= 0) FAIRE 
         ECRIRE ('Erreur de saisie : "A" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(A);
-
+    FAIT;
 
     ECRIRE ('Entrez la valeur de B de sorte qu elle soit inferieur a A, precedement saisi : ');
     LIRE(B);
 
-    TANT QUE (NON ENTIER(B) OU B <= 0) FAIRE 
+    TANT QUE (B <= 0) FAIRE 
         ECRIRE ('Erreur de saisie : "B" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(B);
+    FAIT;
 
     TANT QUE (A < B ) FAIRE 
         ECRIRE ('Erreur de saisie : "A" DOIT etre superieur a "B", veuillez ressaisir');
         ECRIRE ('Entrez la valeur de A : ');
         LIRE(A);
 
-        TANT QUE (NON ENTIER(A) OU A <= 0) FAIRE 
+        TANT QUE (A <= 0) FAIRE 
             ECRIRE ('Erreur de saisie : "A" DOIT etre un entier positif, veuillez ressaisir');
             LIRE(A);
-
+        FAIT;
 
         ECRIRE ('Entrez la valeur de B : ');
         LIRE(B);
 
-        TANT QUE (NON ENTIER(B) OU B <= 0) FAIRE 
+        TANT QUE (B <= 0) FAIRE 
             ECRIRE ('Erreur de saisie : "B" DOIT etre un entier positif, veuillez ressaisir');
             LIRE(B);
+        FAIT;
+    FAIT;
 
     ECRIRE ('Entrez l'operation souhaitee Addition/Soustraction/Multiplication' :');
     LIRE(OPERATION);
@@ -42,15 +45,15 @@ DEBUT
     TANT QUE (OPERATION NON "Addition" OU OPERATION NON "Soustraction" OU OPERATION NON "Multiplication") FAIRE 
         ECRIRE ('Erreur de saisie ne rentrer que l'un des choix suivants : Addition/Soustraction/Multiplication :');
         LIRE(OPERATION);
-
+    FAIT;
+    
     SELON QUE OPERATION VAUT
         "Addition" : 
-            ECRIRE('A + B = ' & CHAINE DE CARACTERE(A + B));
+            ECRIRE('A + B = ' & A + B);
         "Soustraction":
-            ECRIRE('A - B = ' & CHAINE DE CARACTERE(A - B));
+            ECRIRE('A - B = ' & A - B);
         "Multiplication" :
-            ECRIRE('A x B = ' & CHAINE DE CARACTERE(A * B));
-
+            ECRIRE('A x B = ' & A * B);
 FIN;
 
 
