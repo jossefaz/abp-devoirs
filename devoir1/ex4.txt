@@ -15,6 +15,7 @@ DEBUT
     FAIT;
 
     SOMME <- 0;
+    
     POUR I VARIANT DE 1 A N FAIRE
         SOMME <- SOMME + I;
     FAIT;
@@ -38,8 +39,10 @@ DEBUT
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
     FAIT;
+
     SOMME <- 0;
     I <- 1;
+
     TANT QUE (I <= N) FAIRE 
         SOMME <- SOMME + I;
         I <- I +1;
@@ -67,10 +70,13 @@ DEBUT
 
     SOMME <- 0;
     I <- 1;
+
     REPETER 
         SOMME <- SOMME + I;
         I <- I +1;
     JUSQU'A (I <= N);
+
+    ECRIRE('La somme de tous les entiers de 0 a : ' & N & 'est de : ' & SOMME );
 FIN;
 
 

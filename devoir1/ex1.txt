@@ -37,7 +37,7 @@ DEBUT
         SINON
             ECRIRE ('La plus petite valeur est C');
         FIN SI;
-    FIN SI;
+    FIN SI;    
 FIN;
 
 

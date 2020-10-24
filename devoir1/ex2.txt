@@ -24,14 +24,17 @@ DEBUT
     
 
     MAX <- A;
+
     SI B > MAX
     ALORS
         MAX <- B;
     FIN SI;
+
     SI C > MAX
     ALORS
         MAX <- C;
     FIN SI;
+    
     ECRIRE ('La plus grande valeur est : ' & MAX);
 FIN;
 

@@ -15,12 +15,14 @@ DEBUT
     FAIT;
 
     FACT <-1
+
     SI (NON N==1)
     ALORS 
         POUR I VARIANT DE 1 A N FAIRE
             FACT <- FACT * I;
         FAIT;
     FIN SI;
+
     ECRIRE('La factorielle de ' & N & ' est de : ' & FACT);
 FIN;
 
@@ -42,6 +44,7 @@ DEBUT
     FAIT;
 
     FACT <-1
+
     SI (NON N==1)
     ALORS 
         I <- 1;
@@ -50,6 +53,7 @@ DEBUT
             I <- I + 1
         FAIT;
     FIN SI;
+
     ECRIRE('La factorielle de ' & N & ' est de : ' & FACT);
 FIN;
 
@@ -69,7 +73,9 @@ DEBUT
         ECRIRE ('Erreur de saisie : "N" DOIT etre un entier positif, veuillez ressaisir');
         LIRE(N);
     FAIT;
+
     FACT <-1
+
     SI (NON N==1)
     ALORS 
         I <- 1;
@@ -78,6 +84,7 @@ DEBUT
             I <- I + 1
         TANT QUE (I <= N);
     FIN SI;
+    
     ECRIRE('La factorielle de ' & N & ' est de : ' & FACT);
 FIN;
 
