@@ -2,7 +2,7 @@ PROGRAMME Exercice3;
 VARIABLE 
     A : ENTIER;
     B : ENTIER;
-    OPERATION : CHAINE DE CARACTERE;
+    OPERATEUR : CARACTERE ;
 DEBUT
     ECRIRE ('Entrez la valeur de A : ');
     LIRE(A);
@@ -39,22 +39,21 @@ DEBUT
         FAIT;
     FAIT;
 
-    ECRIRE ('Entrez l'operation souhaitée Addition/Soustraction/Multiplication' :');
+    ECRIRE ('Entrez l'operateur souhaitée +/-/*' :');
     LIRE(OPERATION);
 
-    TANT QUE (OPERATION NON "Addition" OU OPERATION NON "Soustraction" OU OPERATION NON "Multiplication") FAIRE 
-        ECRIRE ('Erreur de saisie ne rentrer que l'un des choix suivants : Addition ou Soustraction ou Multiplication :');
+    TANT QUE (OPERATEUR NON "+" OU OPERATEUR NON "-" OU OPERATEUR NON "*") FAIRE 
+        ECRIRE ('Erreur de saisie ne rentrer que l'un des choix suivants : + ou - ou * :');
         LIRE(OPERATION);
     FAIT;
     
-    SELON QUE OPERATION VAUT
-        "Addition" : 
+    SELON QUE OPERATEUR VAUT
+        "+" : 
             ECRIRE('A + B = ' & A + B);
-        "Soustraction":
+        "-":
             ECRIRE('A - B = ' & A - B);
-        "Multiplication" :
+        "*" :
             ECRIRE('A x B = ' & A * B);
 FIN;
-
 
 
