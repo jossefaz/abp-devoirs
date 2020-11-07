@@ -1,0 +1,21 @@
+######## Question 1 ########
+
+
+PROCEDURE RechercheMiniMaxi (VARIABLE tab:TYPTAB, DIM:ENTIER, VARIABLE MINI:ENTIER, VARIABLE MAXI : ENTIER );
+DEBUT {RechercheMiniMaxi}
+    MINI <- tab[1] ;
+    MAXI <- tab[1] ;
+    POUR I VARIANT DE 2 A NBMAX FAIRE
+        SI (tab[I] > MAXI)
+        ALORS
+            MAXI <- tab[I] ;
+        FIN SI;
+        SI (tab[I] < MINI)
+        ALORS
+            MINI <- tab[I] ;
+        FIN SI ;
+    FAIT ;
+    RENVOYER MINI, MAXI ;
+FIN ; {RechercheMiniMaxi}
+
+
