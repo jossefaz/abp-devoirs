@@ -1,21 +1,75 @@
 ######## Question 1 ########
 
 
-PROCEDURE RechercheMiniMaxi (VARIABLE tab:TYPTAB, DIM:ENTIER, VARIABLE MINI:ENTIER, VARIABLE MAXI : ENTIER );
+PROCEDURE RechercheMiniMaxi (VARIABLE TAB:TYPTAB, DIM:ENTIER, VARIABLE MINI:ENTIER, VARIABLE MAXI : ENTIER );
 DEBUT {RechercheMiniMaxi}
-    MINI <- tab[1] ;
-    MAXI <- tab[1] ;
-    POUR I VARIANT DE 2 A NBMAX FAIRE
-        SI (tab[I] > MAXI)
+    MINI <- TAB[1] ;
+    MAXI <- TAB[1] ;
+    POUR I VARIANT DE 2 A DIM FAIRE
+        SI (TAB[I] > MAXI)
         ALORS
-            MAXI <- tab[I] ;
+            MAXI <- TAB[I] ;
         FIN SI;
-        SI (tab[I] < MINI)
+        SI (TAB[I] < MINI)
         ALORS
-            MINI <- tab[I] ;
+            MINI <- TAB[I] ;
         FIN SI ;
     FAIT ;
     RENVOYER MINI, MAXI ;
 FIN ; {RechercheMiniMaxi}
 
 
+######## Question 2 ########
+
+PROCEDURE RechercheIndiceMiniMaxi (VARIABLE TAB:TYPTAB, 
+                                    IND1:ENTIER, 
+                                    IND2:ENTIER, 
+                                    VARIABLE INDMINI:ENTIER, 
+                                    VARIABLE INDMAXI:ENTIER );
+
+DEBUT {RechercheIndiceMiniMaxi}
+    INDMINI <- IND1 ;
+    INDMAXI <- IND1 ;
+    POUR I VARIANT DE IND1 A IND2 FAIRE
+        SI (TAB[I] > TAB[INDMAXI])
+        ALORS
+            INDMAXI <- I ;
+        FIN SI;
+        SI (TAB[I] < TAB[INDMINI])
+        ALORS
+            INDMINI <- I;
+        FIN SI ;
+    FAIT ;
+    RENVOYER INDMINI, INDMAXI ;
+FIN; {RechercheIndiceMiniMaxi}
+
+######## Question 3 ########
+
+PROCEDURE Tri (VARIABLE TAB:TYPTAB, DIM:ENTIER);
+VARIABLE 
+    INDMINI:ENTIER;
+    INDMAXI:ENTIER;
+    IND1:ENTIER;
+    IND2:ENTIER; 
+    TEMP:ENTIER;
+DEBUT {Tri}
+
+    IND1<-1;
+    IND2<-DIM; 
+
+    POUR I VARIANT DE 1 A DIM FAIRE
+
+        INDMINI, INDMAXI <- RechercheIndiceMiniMaxi(TAB, IND1, IND2, INDMINI, INDMAXI);
+
+        TEMP <- TAB[IND1];
+        TAB[IND1] = TAB[INDMINI];
+        TAB[INDMINI] = TEMP;
+
+        TEMP <- TAB[IND2];
+        TAB[IND2] = TAB[INDMAXI];
+        TAB[INDMAXI] = TEMP;
+
+        IND1 <- IND1 + 1;
+        IND2 <- IND2 - 1;
+    FAIT;
+FIN; {Tri}
