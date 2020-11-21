@@ -1,0 +1,16 @@
+####### Question 1 #######
+
+FONCTION CalculDizaine (NB:ENTIER) : ENTIER;
+VARIABLE 
+    RESTE : ENTIER;
+DEBUT {CalculDizaine}
+    RESTE <- NB MOD 10;
+    RENVOYER (NB - RESTE) / 10
+FIN; {CalculDizaine}
+
+####### Question 2 #######
+
+PROCEDURE Transformation (param1:type_param1,param2:type_param2);
+DEBUT {Transformation}
+     corp_de_la_procedure
+FIN; {Transformation}

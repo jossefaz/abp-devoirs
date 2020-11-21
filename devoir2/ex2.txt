@@ -10,7 +10,7 @@ DEBUT {ProduitMatrice}
         POUR J VARIANT DE 1 A DIM FAIRE
             C [I,J] <- 0;
             POUR I VARIANT DE K A DIM FAIRE
-                C [I,J] <- A[I,J] * B[I,J];
+                C [I,J] <- C [I,J] + A[I,J] * B[I,J];
             FAIT;
         FAIT; 
     FAIT;
