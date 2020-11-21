@@ -5,12 +5,41 @@ VARIABLE
     RESTE : ENTIER;
 DEBUT {CalculDizaine}
     RESTE <- NB MOD 10;
-    RENVOYER (NB - RESTE) / 10
+    RENVOYER (NB - RESTE) / 10;
 FIN; {CalculDizaine}
 
 ####### Question 2 #######
 
-PROCEDURE Transformation (param1:type_param1,param2:type_param2);
+PROCEDURE Transformation (TAB:TYPTAB, DIM:ENTIER, VARIABLE MAT:TYPEMAT);
+VARIABLE
+    NBCOL : ENTIER;
+    LIGNE_DIZAINE : ENTIER;
+    TEMP_SUP : ENTIER;
+    TEMP_INF : ENTIER;
+    I,J : ENTIER;
+    FIN_AFFECTATION_TRI : BOOLEEN;
 DEBUT {Transformation}
-     corp_de_la_procedure
+    NBCOL <- DIM / 5;
+    POUR I VARIANT DE 1 A DIM FAIRE
+        LIGNE_DIZAINE <- CalculDizaine(TAB [I]);
+        TEMP_SUP <- TAB[I];
+        FIN_AFFECTATION_TRI <- FAUX;
+        POUR J VARIANT DE 0 A NBCOL FAIRE
+            SI (FIN_AFFECTATION_TRI = FAUX)
+            ALORS
+                SI (MAT[LIGNE_DIZAINE, J] != 50)
+                ALORS
+                    SI (TEMP_SUP < MAT[LIGNE_DIZAINE, J])
+                    ALORS
+                        TEMP_INF <- TEMP_SUP;
+                        TEMP_SUP <- MAT[LIGNE_DIZAINE, J];
+                        MAT[LIGNE_DIZAINE, J] <- TEMP_INF;
+                    FIN SI;
+                SINON
+                    MAT[LIGNE_DIZAINE, J] <- TEMP_SUP;
+                    FIN_AFFECTATION_TRI = VRAI;
+                FIN SI;
+            FIN SI;
+        FAIT;
+    FAIT;   
 FIN; {Transformation}
