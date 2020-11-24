@@ -15,7 +15,6 @@ DEBUT {RechercheMiniMaxi}
             MINI <- TAB[I] ;
         FIN SI ;
     FAIT ;
-    RENVOYER MINI, MAXI ;
 FIN ; {RechercheMiniMaxi}
 
 
@@ -40,7 +39,6 @@ DEBUT {RechercheIndiceMiniMaxi}
             INDMINI <- I;
         FIN SI ;
     FAIT ;
-    RENVOYER INDMINI, INDMAXI ;
 FIN; {RechercheIndiceMiniMaxi}
 
 ######## Question 3 ########
@@ -59,7 +57,7 @@ DEBUT {Tri}
 
     POUR I VARIANT DE 1 A DIM FAIRE
 
-        INDMINI, INDMAXI <- RechercheIndiceMiniMaxi(TAB, IND1, IND2, INDMINI, INDMAXI);
+        RechercheIndiceMiniMaxi(TAB, IND1, IND2, INDMINI, INDMAXI);
 
         TEMP <- TAB[IND1];
         TAB[IND1] = TAB[INDMINI];
