@@ -10,10 +10,12 @@
 #define TOUCHED 'X'
 #define WATER 'o'
 #define PRISTINE '.'
+#define H_BOAT '='
+#define V_BOAT 'U'
 #define FISHNET_SIZE 10
 #define ROWS ((char[]){'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'})
 #define BOATS ((int[]){5, 4, 3, 3, 3, 2, 2, 2, 2})
-#define DEBUG_MODE 1
+#define DEBUG_MODE 0
 
 int read_reset_stdin(char s[], int maxlen) {
     // init empty character, counter and remains character indicator
@@ -112,9 +114,9 @@ int check_free_row(const char row[], int start_index, int boat_length) {
 char get_display_char(int boat_num, int by_width) {
     if (!DEBUG_MODE) {
         if (by_width) {
-            return '=';
+            return H_BOAT;
         }
-        return '|';
+        return V_BOAT;
     }
     char str[10];
     sprintf(str, "%d", boat_num);
@@ -138,14 +140,11 @@ int check_free_col(struct fishnet_arr *fishnet,int start_line_index, int start_c
 
 void feed_fishnet(struct fishnet_arr *fishnet) {
     int *boats=get_shuffled_boats();
+    int by_width = 0;
     for (int i = 0; i < FISHNET_SIZE ; ++i) {
         int current_boat = boats[i];
-        int row = 0, col = 0;
-        int free = 0;
-        //vertical ou horizontal
-
+        int row, col,free = 0;
         while (!free && current_boat != 0) {
-            int by_width;
             by_width = by_width == 1 ? 0 : 1;
             if (by_width) {
                 row = rand() % FISHNET_SIZE;
@@ -162,27 +161,22 @@ void feed_fishnet(struct fishnet_arr *fishnet) {
                 }
             }
             if(free) {
-
                 int start_index;
                 if(by_width) {
                     start_index = get_start_index(col, current_boat);
                 } else {
                     start_index = get_start_index(row, current_boat);
                 }
-                for (int j = 0; j < current_boat; ++j) {
-                    fishnet->net[row][col] = get_display_char(current_boat, by_width);
+                for (int j = start_index; j < current_boat + start_index; ++j) {
                     if (by_width) {
-                        col += 1;
+                        fishnet->net[row][j] = get_display_char(current_boat, by_width);
                     } else {
-                        row +=1;
+                        fishnet->net[j][col] = get_display_char(current_boat, by_width);
                     }
                 }
             }
 
         }
-
-
-        printf("%d\n", boats[i]);
     }
 
 }
@@ -207,12 +201,6 @@ void print_fishnet(struct fishnet_arr fishnet, bool show_already_said) {
     }
 }
 
-
-
-
-
-
-
 int get_line_index(char letter) {
     char upper_letter = toupper(letter);
     int rows_length = sizeof(ROWS) / sizeof(char);
@@ -223,25 +211,45 @@ int get_line_index(char letter) {
     }
     return -1;
 }
+int validate_col_index(const char col_index[]) {
+    int first_val = col_index[1] - '0';
+    if (first_val > 9) {
+        return -1;
+    }
+    int second_val = col_index[2] - '0';
+    if (second_val > 0 || (first_val !=1 && second_val == 0 )) {
+        return -1;
+    }
+    return atoi(col_index);
+
+}
 
 
 int main() {
     // Init the random seed
     srand(time(NULL));
-    char letter[2];
-    int index_line;
-    printf("Entrez une ligne");
-    read_reset_stdin(letter, 2);
-    index_line = get_line_index(letter[0]);
-    if (index_line != -1) {
-        printf("l' index de la ligne est : %d\n", index_line);
-    } else {
-        printf("Mauvaise saisie de lettre, celle ci doit etre comprise entre A et J");
-    }
+
+    char letter[3];
+    int index_line, col_index;
+    do {
+        printf("Entrez une case sous la forme <index ligne><index colonne> Par exemple A1\n");
+        read_reset_stdin(letter, 4);
+        index_line = get_line_index(letter[0]);
+        if (index_line == -1) {
+            printf("Mauvaise saisie de lettre, celle ci doit etre comprise entre A et J\n");
+            continue;
+        }
+        col_index = validate_col_index(letter);
+        if (col_index == -1) {
+            printf("Mauvaise saisie de chiffre, celui ci doit etre comprise entre 0 et 10\n");
+            continue;
+        }
+    } while (index_line == -1 || col_index == -1);
+
 
     struct fishnet_arr fishnet = get_new_fishnet();
     feed_fishnet(&fishnet);
-    set_case(&fishnet, 9,0, WATER);
+//    set_case(&fishnet, 9,0, WATER);
     print_fishnet(fishnet, true);
 
     return 0;
