@@ -12,6 +12,9 @@
 #define PRISTINE '.'
 #define H_BOAT '='
 #define V_BOAT 'U'
+#define GRID_PREFIX "|  "
+#define GRID_ANGLE "   "
+#define GRID_SUFIX "  "
 #define FISHNET_SIZE 10
 #define ROWS ((char[]){'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'})
 #define BOATS ((int[]){5, 4, 3, 3, 3, 2, 2, 2, 2})
@@ -181,11 +184,26 @@ void feed_fishnet(struct fishnet_arr *fishnet) {
 
 }
 
+char * build_headers() {
+    char header_index[10];
+    char *header;
+    header = malloc(100);
+    header[0] = 0;
+    strcat(header, GRID_ANGLE);
+    for (int i = 0; i < FISHNET_SIZE; ++i) {
+        sprintf(header_index, "%d", i);
+        strcat(header, GRID_PREFIX);
+        strcat(header, header_index);
+        strcat(header, GRID_SUFIX);
+    }
+    strcat(header, GRID_PREFIX);
+    return header;
+}
 
 
 
 void print_fishnet(struct fishnet_arr fishnet, bool show_already_said) {
-    printf("___|  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  | \n");
+    printf("%s\n", build_headers());
     for (int i = 0; i < FISHNET_SIZE; ++i) {
         printf("%c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  | \n", ROWS[i],
                get_display_value(show_already_said,fishnet.net[i][0]),
