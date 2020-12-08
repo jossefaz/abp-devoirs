@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdbool.h>
 #include <time.h>
-#include <proc_service.h>
 
 
 #define TOUCHED 'X'
@@ -18,7 +16,7 @@
 #define FISHNET_SIZE 10
 #define ROWS ((char[]){'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'})
 #define BOATS ((int[]){5, 4, 3, 3, 3, 2, 2, 2, 2})
-#define DEBUG_MODE 0
+#define DEBUG_MODE 1
 
 int read_reset_stdin(char s[], int maxlen) {
     // init empty character, counter and remains character indicator
@@ -75,9 +73,9 @@ void set_case(struct fishnet_arr *fishnet, int line, int column, char value) {
     }
 }
 
-char get_display_value(bool show_already_said, char actual_value) {
+char get_display_value(char actual_value) {
     if(actual_value != TOUCHED && actual_value != PRISTINE) {
-        if (show_already_said) {
+        if (DEBUG_MODE) {
             return actual_value;
         }
         return PRISTINE;
@@ -202,20 +200,21 @@ char * build_headers() {
 
 
 
-void print_fishnet(struct fishnet_arr fishnet, bool show_already_said) {
+
+void print_fishnet(struct fishnet_arr fishnet) {
     printf("%s\n", build_headers());
     for (int i = 0; i < FISHNET_SIZE; ++i) {
         printf("%c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  | \n", ROWS[i],
-               get_display_value(show_already_said,fishnet.net[i][0]),
-               get_display_value(show_already_said,fishnet.net[i][1]),
-               get_display_value(show_already_said,fishnet.net[i][2]),
-               get_display_value(show_already_said,fishnet.net[i][3]),
-               get_display_value(show_already_said,fishnet.net[i][4]),
-               get_display_value(show_already_said,fishnet.net[i][5]),
-               get_display_value(show_already_said,fishnet.net[i][6]),
-               get_display_value(show_already_said,fishnet.net[i][7]),
-               get_display_value(show_already_said,fishnet.net[i][8]),
-               get_display_value(show_already_said,fishnet.net[i][9]));
+               get_display_value(fishnet.net[i][0]),
+               get_display_value(fishnet.net[i][1]),
+               get_display_value(fishnet.net[i][2]),
+               get_display_value(fishnet.net[i][3]),
+               get_display_value(fishnet.net[i][4]),
+               get_display_value(fishnet.net[i][5]),
+               get_display_value(fishnet.net[i][6]),
+               get_display_value(fishnet.net[i][7]),
+               get_display_value(fishnet.net[i][8]),
+               get_display_value(fishnet.net[i][9]));
     }
 }
 
@@ -230,8 +229,15 @@ int get_line_index(char letter) {
     return -1;
 }
 int validate_col_index(const char col_index[]) {
+
+    if(!isdigit(col_index[1])) {
+        return -1;
+    }
     int first_val = col_index[1] - '0';
-    if (first_val > 9) {
+    if (first_val > 9 || first_val <1) {
+        return -1;
+    }
+    if(!isdigit(col_index[2])) {
         return -1;
     }
     int second_val = col_index[2] - '0';
@@ -268,7 +274,7 @@ int main() {
     struct fishnet_arr fishnet = get_new_fishnet();
     feed_fishnet(&fishnet);
 //    set_case(&fishnet, 9,0, WATER);
-    print_fishnet(fishnet, true);
+    print_fishnet(fishnet);
 
     return 0;
 }
