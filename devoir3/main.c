@@ -171,10 +171,10 @@ void feed_fishnet(struct fishnet_arr *fishnet, struct boat *boat_list) {
             by_width = by_width == 1 ? 0 : 1;
             if (by_width) {
                 row = rand() % FISHNET_SIZE;
-                col = rand() & (FISHNET_SIZE - current_boat);
+                col = rand() % (FISHNET_SIZE - current_boat);
             } else {
                 row = rand() % (FISHNET_SIZE - current_boat);
-                col = rand() & FISHNET_SIZE;
+                col = rand() % FISHNET_SIZE;
             }
             if(fishnet->net[row][col] == PRISTINE) {
                 if (by_width) {
@@ -341,6 +341,7 @@ int main() {
             }
         }
         print_fishnet(fishnet,0);
+        print_fishnet(fishnet,1);
         end_game = check_end_game(boat_list);
         try_counter++;
     }
