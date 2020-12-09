@@ -8,18 +8,18 @@
 #define TOUCHED 'X'
 #define WATER 'o'
 #define PRISTINE '.'
-#define H_BOAT '='
-#define V_BOAT 'U'
 #define GRID_PREFIX "|  "
 #define GRID_ANGLE "   "
 #define GRID_SUFIX "  "
 #define FISHNET_SIZE 10
 #define ROWS ((char[]){'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'})
+#define BOAT_NUMBER 9
 #define BOATS ((int[]){5, 4, 3, 3, 3, 2, 2, 2, 2})
-#define DEBUG_MODE 1
+
+#define DEBUG_MODE 0
 
 struct boat {
-    char type;
+    int size;
     int coord[5][2];
     int status;
 };
@@ -71,17 +71,15 @@ struct fishnet_arr get_new_fishnet() {
     return fishnet;
 }
 
-void set_case(struct fishnet_arr *fishnet, int line, int column, char value) {
-    if (line < FISHNET_SIZE && column < FISHNET_SIZE) {
-        fishnet -> net[line][column] = value;
-    } else {
-        printf("Un numero de colonne ou de ligne eronne fut passe en argument de la fonction 'set_touched'\n");
-    }
-}
 
-char get_display_value(char actual_value) {
-    if(actual_value != TOUCHED && actual_value != PRISTINE) {
-        if (DEBUG_MODE) {
+
+char get_display_value(char actual_value, int display_boats) {
+    if(actual_value != PRISTINE) {
+
+        if (DEBUG_MODE || display_boats) {
+            return actual_value;
+        }
+        if (actual_value == TOUCHED || actual_value == WATER) {
             return actual_value;
         }
         return PRISTINE;
@@ -93,10 +91,10 @@ char get_display_value(char actual_value) {
 int *get_shuffled_boats() {
     size_t number_of_boats = sizeof(BOATS)/sizeof(BOATS[0]);
     int* copy = malloc(sizeof(int) * number_of_boats);
-    for (int i = 0; i < number_of_boats; i++) {
+    for (int i = 0; i < BOAT_NUMBER; i++) {
         copy[i] = BOATS[i];
     }
-    for (int i = 0; i < number_of_boats; ++i) {
+    for (int i = 0; i < BOAT_NUMBER; ++i) {
         size_t j = rand() % (number_of_boats);
         int t = copy[j];
         copy[j] = copy[i];
@@ -123,22 +121,35 @@ char int_to_char(int num) {
     return str[0];
 }
 
-char get_display_char(int boat_num, int by_width) {
-    if (!DEBUG_MODE) {
-        if (by_width) {
-            return H_BOAT;
+
+int set_boat_status(struct boat targeted_boat) {
+    //check targeted boat status
+    int boat_status = 0;
+    for (int i = 0; i < targeted_boat.size; ++i) {
+        if (targeted_boat.coord[i][0] != -1 && targeted_boat.coord[i][1] != -1) {
+            boat_status = 1;
+            break;
         }
-        return V_BOAT;
     }
-    return int_to_char(boat_num);
+    targeted_boat.status = boat_status;
+    return boat_status;
 }
 
-
-
-
-
-
-
+int set_coord_touched(struct boat *boat_list, int row_index, int col_index, int target_boat_size) {
+    struct boat targeted_boat;
+    for (int i = 0; i < BOAT_NUMBER; ++i) {
+        if (boat_list[i].size == target_boat_size) {
+            for (int j = 0; j < target_boat_size; ++j) {
+                if(boat_list[i].coord[j][0] == row_index && boat_list[i].coord[j][1] == col_index) {
+                    boat_list[i].coord[j][0] = -1;
+                    boat_list[i].coord[j][1] = -1;
+                    targeted_boat = boat_list[i];
+                }
+            }
+        }
+    }
+    return !set_boat_status(targeted_boat);
+}
 int check_free_col(struct fishnet_arr *fishnet,int start_line_index, int start_col_index, int boat_length) {
     start_line_index = get_start_index(start_line_index,boat_length);
     for (int i = start_line_index; i < boat_length + start_line_index; ++i) {
@@ -160,9 +171,9 @@ void feed_fishnet(struct fishnet_arr *fishnet, struct boat *boat_list) {
             by_width = by_width == 1 ? 0 : 1;
             if (by_width) {
                 row = rand() % FISHNET_SIZE;
-                col = rand() & FISHNET_SIZE - current_boat;
+                col = rand() & (FISHNET_SIZE - current_boat);
             } else {
-                row = rand() % FISHNET_SIZE - current_boat;
+                row = rand() % (FISHNET_SIZE - current_boat);
                 col = rand() & FISHNET_SIZE;
             }
             if(fishnet->net[row][col] == PRISTINE) {
@@ -180,19 +191,21 @@ void feed_fishnet(struct fishnet_arr *fishnet, struct boat *boat_list) {
                     start_index = get_start_index(row, current_boat);
                 }
                 int k = 0;
+                
                 for (int j = start_index; j < current_boat + start_index; ++j) {
+                    char boat_char = int_to_char(current_boat);
                     if (by_width) {
-                        fishnet->net[row][j] = get_display_char(current_boat, by_width);
+                        fishnet->net[row][j] = boat_char;
                         boat_list[i].coord[k][0] = row;
                         boat_list[i].coord[k][1] = j;
                     } else {
-                        fishnet->net[j][col] = get_display_char(current_boat, by_width);
+                        fishnet->net[j][col] = boat_char;
                         boat_list[i].coord[k][0] = j;
                         boat_list[i].coord[k][1] = col;
                     }
                     k++;
                 }
-                boat_list[i].type = int_to_char(current_boat);
+                boat_list[i].size = current_boat;
                 boat_list[i].status = 1;
             }
 
@@ -220,20 +233,20 @@ char * build_headers() {
 
 
 
-void print_fishnet(struct fishnet_arr fishnet) {
+void print_fishnet(struct fishnet_arr fishnet, int display_boats) {
     printf("%s\n", build_headers());
     for (int i = 0; i < FISHNET_SIZE; ++i) {
         printf("%c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  | \n", ROWS[i],
-               get_display_value(fishnet.net[i][0]),
-               get_display_value(fishnet.net[i][1]),
-               get_display_value(fishnet.net[i][2]),
-               get_display_value(fishnet.net[i][3]),
-               get_display_value(fishnet.net[i][4]),
-               get_display_value(fishnet.net[i][5]),
-               get_display_value(fishnet.net[i][6]),
-               get_display_value(fishnet.net[i][7]),
-               get_display_value(fishnet.net[i][8]),
-               get_display_value(fishnet.net[i][9]));
+               get_display_value(fishnet.net[i][0], display_boats),
+               get_display_value(fishnet.net[i][1], display_boats),
+               get_display_value(fishnet.net[i][2], display_boats),
+               get_display_value(fishnet.net[i][3], display_boats),
+               get_display_value(fishnet.net[i][4], display_boats),
+               get_display_value(fishnet.net[i][5], display_boats),
+               get_display_value(fishnet.net[i][6], display_boats),
+               get_display_value(fishnet.net[i][7], display_boats),
+               get_display_value(fishnet.net[i][8], display_boats),
+               get_display_value(fishnet.net[i][9], display_boats));
     }
 }
 
@@ -253,7 +266,7 @@ int validate_col_index(const char col_index[]) {
         return -1;
     }
     int first_val = col_index[1] - '0';
-    if (first_val > 9 || first_val <1) {
+    if (first_val > 9 || first_val <0) {
         return -1;
     }
     if(!isdigit(col_index[2]) && col_index[2] != '\000') {
@@ -263,40 +276,76 @@ int validate_col_index(const char col_index[]) {
     if (second_val > 0 || (first_val !=1 && second_val == 0 )) {
         return -1;
     }
-    return atoi(col_index);
+    char num_filter[] = "0123456789";
+    return atoi(strpbrk(col_index, num_filter));
 
 }
 
+int check_end_game(struct boat *boat_list) {
+    for (int i = 0; i < BOAT_NUMBER; ++i) {
+        if (boat_list[i].status == 1) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int check_case(int row, int col, struct fishnet_arr fishnet) {
+    int touched = 0;
+    if (fishnet.net[row][col] != PRISTINE && fishnet.net[row][col] != WATER  && fishnet.net[row][col] != TOUCHED ) {
+        touched = fishnet.net[row][col] - '0';
+    }
+    return touched;
+}
 
 int main() {
+    struct fishnet_arr fishnet = get_new_fishnet();
+    struct boat boat_list[BOAT_NUMBER];
+    char target[3];
+    int row_index,
+    col_index,
+    try_counter = 0,
+    end_game = 0;
+
     // Init the random seed
     srand(time(NULL));
-    struct fishnet_arr fishnet = get_new_fishnet();
-    struct boat boat_list[9];
     feed_fishnet(&fishnet, boat_list);
 
-
-    char letter[3];
-    int index_line, col_index;
-    do {
-        printf("Entrez une case sous la forme <index ligne><index colonne> Par exemple A1\n");
-        read_reset_stdin(letter, 4);
-        index_line = get_line_index(letter[0]);
-        if (index_line == -1) {
-            printf("Mauvaise saisie de lettre, celle ci doit etre comprise entre A et J\n");
-            continue;
+    while (!end_game) {
+        do {
+            printf("Entrez une case sous la forme <index ligne><index colonne> Par exemple A1\n");
+            read_reset_stdin(target, 4);
+            row_index = get_line_index(target[0]);
+            if (row_index == -1) {
+                printf("Mauvaise saisie de lettre, celle ci doit etre comprise entre A et J\n");
+                continue;
+            }
+            col_index = validate_col_index(target);
+            if (col_index == -1) {
+                printf("Mauvaise saisie de chiffre, celui ci doit etre comprise entre %d et %d\n", 0, FISHNET_SIZE);
+                continue;
+            }
+        } while (row_index == -1 || col_index == -1);
+        int check_target = check_case(row_index, col_index, fishnet);
+        if (check_target) {
+            puts("Touché\n");
+            fishnet.net[row_index][col_index] = TOUCHED;
+            int flowed = set_coord_touched(boat_list, row_index, col_index, check_target);
+            if (flowed) {
+                puts("Coulé !!");
+            }
+        } else {
+            puts("A l'eau\n");
+            if (fishnet.net[row_index][col_index] != TOUCHED) {
+                fishnet.net[row_index][col_index] = WATER;
+            }
         }
-        col_index = validate_col_index(letter);
-        if (col_index == -1) {
-            printf("Mauvaise saisie de chiffre, celui ci doit etre comprise entre 0 et 10\n");
-            continue;
-        }
-    } while (index_line == -1 || col_index == -1);
+        print_fishnet(fishnet,0);
+        end_game = check_end_game(boat_list);
+        try_counter++;
+    }
 
-
-
-//    set_case(&fishnet, 9,0, WATER);
-    print_fishnet(fishnet);
+    printf("Bravo vous avez gangné en : %d coups", try_counter);
 
     return 0;
 }
