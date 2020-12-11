@@ -214,39 +214,28 @@ void feed_fishnet(struct fishnet_arr *fishnet, struct boat *boat_list) {
 
 }
 
-char * build_headers() {
-    char header_index[10];
-    char *header;
-    header = malloc(100);
-    header[0] = 0;
-    strcat(header, GRID_ANGLE);
+void print_headers() {
+    printf(GRID_ANGLE);
     for (int i = 0; i < FISHNET_SIZE; ++i) {
-        sprintf(header_index, "%d", i);
-        strcat(header, GRID_PREFIX);
-        strcat(header, header_index);
-        strcat(header, GRID_SUFIX);
+        printf(GRID_PREFIX);
+        printf("%d", i);
+        printf(GRID_SUFIX);
     }
-    strcat(header, GRID_PREFIX);
-    return header;
+    printf(GRID_PREFIX);
+    printf("\n");
 }
 
 
 
 
 void print_fishnet(struct fishnet_arr fishnet, int display_boats) {
-    printf("%s\n", build_headers());
+    print_headers();
     for (int i = 0; i < FISHNET_SIZE; ++i) {
-        printf("%c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  |  %c  | \n", ROWS[i],
-               get_display_value(fishnet.net[i][0], display_boats),
-               get_display_value(fishnet.net[i][1], display_boats),
-               get_display_value(fishnet.net[i][2], display_boats),
-               get_display_value(fishnet.net[i][3], display_boats),
-               get_display_value(fishnet.net[i][4], display_boats),
-               get_display_value(fishnet.net[i][5], display_boats),
-               get_display_value(fishnet.net[i][6], display_boats),
-               get_display_value(fishnet.net[i][7], display_boats),
-               get_display_value(fishnet.net[i][8], display_boats),
-               get_display_value(fishnet.net[i][9], display_boats));
+        printf("%c  |", ROWS[i]);
+        for (int j = 0; j < FISHNET_SIZE; ++j) {
+            printf("  %c  |", get_display_value(fishnet.net[i][j], display_boats));
+        }
+        printf("\n");
     }
 }
 
@@ -282,71 +271,116 @@ int validate_col_index(const char col_index[]) {
 }
 
 int check_end_game(struct boat *boat_list) {
+    // On itere selon le nombre de bqteau sur la liste des structures bateau
     for (int i = 0; i < BOAT_NUMBER; ++i) {
+        // des qu un bateau a pour statut non-coulé
         if (boat_list[i].status == 1) {
+            // on renvoi 0 indiqant que le jeu n'est pas terminé
             return 0;
         }
     }
+    // Sinon tous les bateau on un statut 0 on renvoie que le jeu est terminé
     return 1;
 }
 
 int check_case(int row, int col, struct fishnet_arr fishnet) {
-    int touched = 0;
+    // Si le cqrqctere correspondant à la ligne et la colonne visée n'est ni PRISTINE ni WATER ni TOUCHED
     if (fishnet.net[row][col] != PRISTINE && fishnet.net[row][col] != WATER  && fishnet.net[row][col] != TOUCHED ) {
-        touched = fishnet.net[row][col] - '0';
+        // On retourne le chiffre correspondant à la taille du bateau
+        return fishnet.net[row][col] - '0';
     }
-    return touched;
+    // sinon on retourne 0
+    return 0;
 }
 
 int main() {
+    // On declare et on instancie une nouvelle grille pour le programme
     struct fishnet_arr fishnet = get_new_fishnet();
+    // On declare une nouvelle liste de structures "boats" pour gerer les bateaux; leurs coordonées, et leurs status
     struct boat boat_list[BOAT_NUMBER];
+    // On declare un tableau de char pour recevoir l'entrée utilisateur
     char target[3];
+
+    // On declare 4 integers,
+    // un pour l'index ligne,
+    // l'autre pour l'index colonne,
+    // un compteur d'essai et
+    // un qui sert de booleen pour determiner si la partie est finie ou non.
     int row_index,
     col_index,
     try_counter = 0,
     end_game = 0;
 
-    // Init the random seed
+    // On instancie un flux permettant de randomiser
     srand(time(NULL));
+
+    // On remplie la grille en y passant notre liste de bateau qui se remplira au fil des iteration sur la grille
     feed_fishnet(&fishnet, boat_list);
 
+    // Tqnt que le jeu n'est pas fini
     while (!end_game) {
         do {
+            // On demande à l'utilisateur de rentrer une case sous la forme <index ligne><index colonne> et on donne un exemple
             printf("Entrez une case sous la forme <index ligne><index colonne> Par exemple A1\n");
+            // On lit l'entrée utlisateur puis on remet l'entrée standard -stdin- à 0
             read_reset_stdin(target, 4);
+            // On verifie a quel index de ligne correspond la lettre entrée par l'utilisateur
             row_index = get_line_index(target[0]);
+            // Si cette lettre n'est pas valide (voire ce n'est pas du tout une lettre)
             if (row_index == -1) {
+                // on indique a l'utilisateur l'erreur de saisie
                 printf("Mauvaise saisie de lettre, celle ci doit etre comprise entre A et J\n");
+                // puis on reboucle afin de l'inviter à resaisir
                 continue;
             }
+            // On verifie a quel index de colonne correspond les chiffres entrés par l'utilisateur
             col_index = validate_col_index(target);
+            // Si ces chiffres ne sont pas valides (voire ce ne sont pas des chiffres)
             if (col_index == -1) {
+                // on indique a l'utilisateur l'erreur de saisie
                 printf("Mauvaise saisie de chiffre, celui ci doit etre comprise entre %d et %d\n", 0, FISHNET_SIZE);
+                // puis on reboucle afin de l'inviter à resaisir
                 continue;
             }
+            // On reboucle tant que la saisie utilisateur n'est pas velide
         } while (row_index == -1 || col_index == -1);
+        // On verifie si la case entrée par l'utilisateur est une case occupée
         int check_target = check_case(row_index, col_index, fishnet);
+        // Si oui
         if (check_target) {
+            // On annonce à l'utilisateur qu'il a touché
             puts("Touché\n");
+            // On remplace la case de la grille par le caractère correspondant à touché
             fishnet.net[row_index][col_index] = TOUCHED;
+            // On remplace les coordonées du bateau touché par des coordonées invalides indiquant la case touchée, cette fonction nous renvoie le statut du bateau
             int flowed = set_coord_touched(boat_list, row_index, col_index, check_target);
+            // Si le statut du bateau est 'coulé'
             if (flowed) {
+                // On annonce à l'utilisateur qu'il a coulé un bateau
                 puts("Coulé !!");
             }
         } else {
+            // Si non; on annonce à l'utilisateur qu'il a fait mouche
             puts("A l'eau\n");
+            // Si la case était deja touché on ne fait rien - et tant pis pour l'utilisateur qui a perdu un coup
             if (fishnet.net[row_index][col_index] != TOUCHED) {
+                // si la case n'était pas touchée jusqu'à maintenant, on inditque par un symbole que cette case est vide
                 fishnet.net[row_index][col_index] = WATER;
             }
         }
+        // on affiche à l'utilisateur la grille courrante avec tous les symboles correspondant
         print_fishnet(fishnet,0);
-        print_fishnet(fishnet,1);
+        if (DEBUG_MODE) {
+            // Si on est en mode debug, on imprime également la grille mais avec la position de chaque bateau indiqué par le nombre de case du bateau
+            print_fishnet(fishnet,1);
+        }
+        // On verifie si le jeu est fini -si il reste des bateaux dont le statut est 1 à savoir non - coulé
         end_game = check_end_game(boat_list);
+        // on incrémente le compteur d'essai
         try_counter++;
     }
-
+    // si le jeu est fini on indique à l'utilisateur qu'il a gagné et le nombre de coup pour y parvenir
     printf("Bravo vous avez gangné en : %d coups", try_counter);
-
+    // on retourne le code 0 pour indiquer le de programme s'est executé sans erreur
     return 0;
 }
