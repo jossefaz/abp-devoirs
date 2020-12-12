@@ -5,6 +5,7 @@
 #include <time.h>
 
 
+
 #define TOUCHED 'X'
 #define WATER 'o'
 #define PRISTINE '.'
@@ -122,7 +123,7 @@ char int_to_char(int num) {
 }
 
 
-int set_boat_status(struct boat targeted_boat) {
+int get_boat_status(struct boat targeted_boat) {
     //check targeted boat status
     int boat_status = 0;
     for (int i = 0; i < targeted_boat.size; ++i) {
@@ -131,24 +132,25 @@ int set_boat_status(struct boat targeted_boat) {
             break;
         }
     }
-    targeted_boat.status = boat_status;
     return boat_status;
 }
 
 int set_coord_touched(struct boat *boat_list, int row_index, int col_index, int target_boat_size) {
-    struct boat targeted_boat;
+    int boat_status;
     for (int i = 0; i < BOAT_NUMBER; ++i) {
         if (boat_list[i].size == target_boat_size) {
             for (int j = 0; j < target_boat_size; ++j) {
                 if(boat_list[i].coord[j][0] == row_index && boat_list[i].coord[j][1] == col_index) {
                     boat_list[i].coord[j][0] = -1;
                     boat_list[i].coord[j][1] = -1;
-                    targeted_boat = boat_list[i];
+                    boat_status = get_boat_status(boat_list[i]);
+                    boat_list[i].status = boat_status;
                 }
             }
         }
     }
-    return !set_boat_status(targeted_boat);
+
+    return boat_status;
 }
 int check_free_col(struct fishnet_arr *fishnet,int start_line_index, int start_col_index, int boat_length) {
     start_line_index = get_start_index(start_line_index,boat_length);
@@ -250,31 +252,32 @@ int get_line_index(char letter) {
     return -1;
 }
 int validate_col_index(const char col_index[]) {
-
+    //si l'utilisateur n'a pas rentré un chiffre a partir du second caractère
     if(!isdigit(col_index[1])) {
+        //On retourne -1 afin de signaler l'invalidité du caractère
         return -1;
     }
-    int first_val = col_index[1] - '0';
-    if (first_val > 9 || first_val <0) {
+    // Test passé on a donc un caractère chiffre on retire la valeur ASCII 48 qui est celle de 0 afin d'obtenir l"entier correspondant
+    int index_col = col_index[1] - '0';
+    // si ce chiffre est inferieur à 0 ou superieur à 9 (ca ne devrait pas arriver)
+    if (index_col > 9 || index_col <0) {
+        //On retourne -1 afin de signaler l'invalidité du caractère
         return -1;
     }
-    if(!isdigit(col_index[2]) && col_index[2] != '\000') {
+    // Si un troisieme caractère a été saisi
+    if(col_index[2] != '\000') {
+        //On retourne -1 afin de signaler l'invalidité du caractère
         return -1;
     }
-    int second_val = col_index[2] - '0';
-    if (second_val > 0 || (first_val !=1 && second_val == 0 )) {
-        return -1;
-    }
-    char num_filter[] = "0123456789";
-    return atoi(strpbrk(col_index, num_filter));
+    return index_col;
 
 }
 
 int check_end_game(struct boat *boat_list) {
     // On itere selon le nombre de bqteau sur la liste des structures bateau
     for (int i = 0; i < BOAT_NUMBER; ++i) {
-        // des qu un bateau a pour statut non-coulé
-        if (boat_list[i].status == 1) {
+        struct boat b = boat_list[i];
+        if (b.status == 1) {
             // on renvoi 0 indiqant que le jeu n'est pas terminé
             return 0;
         }
@@ -320,6 +323,7 @@ int main() {
     // Tqnt que le jeu n'est pas fini
     while (!end_game) {
         do {
+
             // On demande à l'utilisateur de rentrer une case sous la forme <index ligne><index colonne> et on donne un exemple
             printf("Entrez une case sous la forme <index ligne><index colonne> Par exemple A1\n");
             // On lit l'entrée utlisateur puis on remet l'entrée standard -stdin- à 0
@@ -338,7 +342,7 @@ int main() {
             // Si ces chiffres ne sont pas valides (voire ce ne sont pas des chiffres)
             if (col_index == -1) {
                 // on indique a l'utilisateur l'erreur de saisie
-                printf("Mauvaise saisie de chiffre, celui ci doit etre comprise entre %d et %d\n", 0, FISHNET_SIZE);
+                printf("Mauvaise saisie de chiffre, celui ci doit etre comprise entre %d et %d\n", 0, FISHNET_SIZE -1);
                 // puis on reboucle afin de l'inviter à resaisir
                 continue;
             }
@@ -347,6 +351,7 @@ int main() {
         // On verifie si la case entrée par l'utilisateur est une case occupée
         int check_target = check_case(row_index, col_index, fishnet);
         // Si oui
+        system("clear");
         if (check_target) {
             // On annonce à l'utilisateur qu'il a touché
             puts("Touché\n");
@@ -369,7 +374,9 @@ int main() {
             }
         }
         // on affiche à l'utilisateur la grille courrante avec tous les symboles correspondant
+
         print_fishnet(fishnet,0);
+        print_fishnet(fishnet,1);
         if (DEBUG_MODE) {
             // Si on est en mode debug, on imprime également la grille mais avec la position de chaque bateau indiqué par le nombre de case du bateau
             print_fishnet(fishnet,1);
